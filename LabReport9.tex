@@ -1,0 +1,76 @@
+\documentclass[11pt]{report}
+\usepackage{outline}
+\usepackage{pmgraph}
+\usepackage[normalem]{ulem}
+\title{\textbf{AerE 361 Lab 9 Report}}
+\author{Dalton Michalski}
+\date{\oldstylenums{10}/\oldstylenums{23}/\oldstylenums{2018}}
+%--------------------Make usable space all of page
+\setlength\parindent{24pt}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\headsep}{-.25in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+\usepackage{xcolor}
+\definecolor{light-gray}{gray}{0.95}
+\newcommand{\code}[1]{\colorbox{light-gray}{\texttt{#1}}}
+%--------------------Indention
+\setlength{\parindent}{1cm}
+
+\begin{document}
+%--------------------Title Page
+\maketitle
+ 
+%--------------------Begin Outline
+\section{Problem Statements}
+	\textbf{Answers to Exercises 2-4 in \code{.txt} files in GitHub lab repository}
+    \begin{outline}
+    	\item Exercise 1.
+    	\begin{list}
+    	    \item \\ Write a C program that takes in as an input a decimal real number and outputs the same number in binary form. This should be done by computing the integer and the fractional parts seperately.
+    	\end{list}
+    	\item Exercise 5.
+    	\begin{list}
+    	    \item \\ Write a C program similiar to that in Exercise 1, however this time the user can input the number of bits to use for the exponent and significand portions of the resulting binary number.
+    	\end{list}
+    	\item Exercise 7.
+    	\begin{list}
+    	    \item \\ Write a C program to generate \code{n} terms in the sequence given by the difference equation, \begin{equation} \label{eq:1}
+    	        x_{k+1}-111-\frac{1130-\frac{3000}{x_{k-1}}}{x_k}
+    	    \end{equation}
+    	    with \begin{equation}
+    	        x_1 = \frac{11}{2}
+    	    \end{equation}
+    	    and \begin{equation}
+    	        x_2 = \frac{61}{11}
+    	    \end{equation}
+    	    using \code{n=10} if in single precision and \code{n=20} if using double precision. The user should be able to specify whether or not to display double precision results as opposed to single by include a \code{-d} flag.
+    	\end{list}
+	\end{outline}
+\newpage
+
+\section{Program Design}
+\begin{outline}
+\item Exercise 1
+\begin{list}
+    \item \\ This program begins by using the \code{printf} and \code{scanf} functions to prompt the user to input a decimal number and then read in the number. This number is then stored in a variable of long float type. The number is then split into two seperate variables, one for the integer portion before the decimal point and one for all numbers after the decimal. Using two loops, the integer and decimal portions of the binary are calculated in an external function. The integer portion is calculated using a while loop that divides the integer portion by 2 over and over, if it is an even number a 0 is stored in an array, if it is odd, the remainder of 1 is stored in the same array for each successive division. This continues until the integer portion is less than 1. For the fraction part, the original fraction number is multiplied by 2, if the the resulting number is greater than 1, the 1 is stored in an array, and the remaining decimal is again multiplied by 2. This process continues until the resulting number is less than 0.0. To display the results, for the integer portion the array of 0s and 1s is printed to the screen in reverse order followed by a decimal point, the fraction array of 0s and 1s is then printed.
+\end{list}
+\item Exercise 5
+\item Exercise 7 \begin{itemize}
+    \item \\ In order to calculate the sum given by equation \ref{eq:1}, there are two external functions, one for summing up to \code{n=20} and using double float type, and one for summing to \code{n = 10} using float type. In order to decide which precision to use, a \code{-d} flag can be added in the command line if double is desired. This is accomplished by using \code{argc} and \code{argv} to read in and store the command line flag. The \code{strcmp} function is then used to search for the \code{-d} flag, if it is successful the output is stored in a new variable. This new variable is then used in an \code{if} statement inside of \code{main} to decide which precision function is called and which results are printed to the screen. 
+\end{itemize}
+\end{outline}
+\newpage
+\section{Discussion}
+The main issue I ran into during this project, was a large error in my calculated values. I was able to trace this back to the division of different data types within the \code{main} function of my code. In order to resolve this, I made all data the same type, double floats, and my code then started to return correct values. I was initially also having some issues making sure my code was always calculating and using the correct factorial values, but this was resolved by taking the factorial calculation outside of the \code{main} function. Outside of those two issues, the rest of the coding went relatively smoothly and I believe i have produced a well function Maclaurin series calculator.One noteworthy observation is that this series is pretty accurage as long as $x < 7$, under this threshold the code will always converge quickly, even to $\epsilon < 0.00001$ or smaller relative error. Im assuming this is because the series is expanded from $x=0$ so the farther $x$ is from zero, the less accurate this series is.
+\newpage
+\section{References}
+\\ https://reu.dimacs.rutgers.edu/Symbols.pdf
+\\ https://fresh2refresh.com/c-programming/c-function/c-math-h-library-functions/
+\\ https://www.overleaf.com/learn/latex/Cross\_referencing\_sections\_and\_equations/
+\\ https://www.quora.com/What-is-argc-argv-in-C-What-is-its-purpose-Who-introduced-those-functions
+\\ https://www.geeksforgeeks.org/structures-c/
+\\ http://steve.hollasch.net/cgindex/coding/ieeefloat.html
+\end{document}
